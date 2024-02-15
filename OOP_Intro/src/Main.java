@@ -1,9 +1,12 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("test");
+        int width = 10;
+        int height = 10;
+        int mines = 10;
 
+        Board board = new Board(width, height, mines);
+
+        board.displayBoard();
     }
 }
