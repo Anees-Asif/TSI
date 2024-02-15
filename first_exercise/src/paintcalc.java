@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+// test comment
 public class paintcalc {
     public static void main(String[] args) {
         System.out.println("Welcome to the Painter Calculator!");
