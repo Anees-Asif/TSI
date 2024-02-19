@@ -94,6 +94,7 @@ public class GameGUI {
 
 
     private static void updateButtonAppearance(JButton button, Cell cell) {
+        button.setFont(new Font(button.getFont().getName(), Font.BOLD, 35));
         if (cell.isRevealed()) {
             if (cell.isMine()) {
                 button.setBackground(Color.RED);
