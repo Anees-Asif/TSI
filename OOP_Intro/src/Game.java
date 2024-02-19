@@ -28,7 +28,7 @@ public class Game {
             if (isValidCoordinate(row, col)) {
                 Cell cell = board.getCell(row, col);
                 if ("r".equalsIgnoreCase(action)) {
-                    if (cell.isFlagged()) {1
+                    if (cell.isFlagged()) {
                         System.out.println("This cell is flagged and cannot be revealed. Choose another action.");
                     } else {
                         board.revealCell(row, col);
