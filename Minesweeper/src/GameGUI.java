@@ -9,9 +9,15 @@ public class GameGUI {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
     public static void createAndShowGUI() {
-        int width = Integer.parseInt(JOptionPane.showInputDialog("Enter board width:"));
-        int height = Integer.parseInt(JOptionPane.showInputDialog("Enter board height:"));
-        int mines = Integer.parseInt(JOptionPane.showInputDialog("Enter number of mines:"));
+        int width = getPositiveIntFromUser("Enter board width:");
+        int height = getPositiveIntFromUser("Enter board height:");
+        int mines = -1;
+        while (mines < 0 || mines >= width * height) {
+            mines = getPositiveIntFromUser("Enter number of mines:");
+            if (mines >= width * height) {
+                JOptionPane.showMessageDialog(null, "Number of mines must be less than the total number of cells.");
+            }
+        }
 
         if (width > 0 && height > 0 && mines < width * height) {
             Board board = new Board(width, height, mines);
@@ -145,6 +151,24 @@ public class GameGUI {
         }
     }
 
+    private static int getPositiveIntFromUser(String prompt) {
+        int value = -1;
+        while (value <= 0) {
+            try {
+                String input = JOptionPane.showInputDialog(prompt);
+                if (input == null) { // User clicked cancel
+                    System.exit(0); // Exit the application
+                }
+                value = Integer.parseInt(input);
+                if (value <= 0) {
+                    JOptionPane.showMessageDialog(null, "Please enter a positive integer greater than 0.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a numeric value.");
+            }
+        }
+        return value;
+    }
 
 
 }
