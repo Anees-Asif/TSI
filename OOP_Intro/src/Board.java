@@ -105,7 +105,7 @@ public class Board {
         }
 
         cells[row][col].reveal();
-        // System.out.println("Revealed cell at (" + row + ", " + col + ")");
+        System.out.println("Revealed cell at (" + row + ", " + col + ")");
 
         // If the cell has no neighboring mines, recursively reveal its neighbors
         if (cells[row][col].getNeighboringMines() == 0) {

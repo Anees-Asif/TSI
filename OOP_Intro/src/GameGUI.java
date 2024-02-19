@@ -39,7 +39,7 @@ public class GameGUI {
                         Cell cell = board.getCell(finalY, finalX);
                         if (!cell.isRevealed() && !cell.isFlagged()) {
                             board.revealCell(finalY, finalX);
-                            updateButtonAppearance(button, cell);
+                            refreshGrid(board, buttonGrid);
 
                             if (cell.isMine()) {
                                 button.setBackground(Color.RED);
@@ -61,27 +61,40 @@ public class GameGUI {
     }
 
     public static void main(String[] args) {
-        Board board = new Board(3, 3, 2);
+        Board board = new Board(4, 4, 3);
         SwingUtilities.invokeLater(() -> createAndShowGUI(board));
     }
+    private static void refreshGrid(Board board, JButton[][] buttonGrid) {
+        for (int y = 0; y < board.getHeight(); y++) {
+            for (int x = 0; x < board.getWidth(); x++) {
+                JButton button = buttonGrid[y][x];
+                Cell cell = board.getCell(y, x);
+                updateButtonAppearance(button, cell);
+            }
+        }
+    }
+
+
+
 
     private static void updateButtonAppearance(JButton button, Cell cell) {
         if (cell.isRevealed()) {
             if (cell.isMine()) {
-
                 button.setBackground(Color.RED);
             } else {
                 int neighboringMines = cell.getNeighboringMines();
-                button.setText(neighboringMines > 0 ? Integer.toString(neighboringMines) : "0");
+                button.setText(neighboringMines > 0 ? Integer.toString(neighboringMines) : "");
+                button.setEnabled(false);
             }
         } else if (cell.isFlagged()) {
-            button.setBackground(Color.ORANGE);
             button.setText("F");
+            button.setEnabled(false); // Disable flagged buttons
         } else {
             button.setText("");
+            button.setEnabled(true); // Enable the button if it is not revealed or flagged
         }
-        button.setEnabled(false);
     }
+
     private static boolean checkWinCondition(Board board) {
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
