@@ -18,8 +18,6 @@ public class GameGUI {
                 JOptionPane.showMessageDialog(null, "Number of mines must be less than the total number of cells.");
             }
         }
-
-        if (width > 0 && height > 0 && mines < width * height) {
             Board board = new Board(width, height, mines);
             JFrame frame = new JFrame("Minesweeper");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,11 +78,8 @@ public class GameGUI {
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-        } else{
-            JOptionPane.showMessageDialog(null, "Invalid input. Please enter valid dimensions and number of mines.");
-            System.exit(1);
         }
-    }
+
 
 
     private static void refreshGrid(Board board, JButton[][] buttonGrid) {
@@ -156,8 +151,8 @@ public class GameGUI {
         while (value <= 0) {
             try {
                 String input = JOptionPane.showInputDialog(prompt);
-                if (input == null) { // User clicked cancel
-                    System.exit(0); // Exit the application
+                if (input == null) {
+                    System.exit(0);
                 }
                 value = Integer.parseInt(input);
                 if (value <= 0) {
