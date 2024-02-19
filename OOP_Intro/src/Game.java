@@ -11,11 +11,6 @@ public class Game {
         this.scanner = new Scanner(System.in);
     }
 
-    private boolean isValidCoordinate(int x, int y) {
-
-        return x >= 0 && x < board.getWidth() && y >= 0 && y < board.getHeight();
-    }
-
     public void startGame() {
         while (!gameOver) {
             System.out.println("Current board state:");
@@ -72,7 +67,10 @@ public class Game {
         return true;
     }
 
+    private boolean isValidCoordinate(int x, int y) {
 
+        return x >= 0 && x < board.getWidth() && y >= 0 && y < board.getHeight();
+    }
 
     public static void main(String[] args) {
         Game game = new Game(4, 4, 2);

@@ -50,15 +50,18 @@ public class GameGUI {
                                 refreshGrid(board, buttonGrid);
 
                                 if (cell.isMine()) {
-                                    button.setBackground(Color.RED);
+                                    revealAllMines(board, buttonGrid);
+                                    disableAllButtons(buttonGrid);
                                     showMessageDialog(frame, "Game over. You hit a mine!");
                                 } else if (checkWinCondition(board)) {
+                                    revealAllMines(board, buttonGrid);
+                                    disableAllButtons(buttonGrid);
                                     showMessageDialog(frame, "Congratulations, you've cleared all non-mine cells!");
-
                                 }
                             }
                         }
                     });
+
                     gridPanel.add(button);
                 }
             }
@@ -69,7 +72,7 @@ public class GameGUI {
             frame.setVisible(true);
         } else{
             JOptionPane.showMessageDialog(null, "Invalid input. Please enter valid dimensions and number of mines.");
-            System.exit(1); // Exit the application if the input is invalid
+            System.exit(1);
         }
     }
 
@@ -89,22 +92,21 @@ public class GameGUI {
 
 
 
-
     private static void updateButtonAppearance(JButton button, Cell cell) {
         if (cell.isRevealed()) {
             if (cell.isMine()) {
                 button.setBackground(Color.RED);
             } else {
                 int neighboringMines = cell.getNeighboringMines();
-                button.setText(neighboringMines > 0 ? Integer.toString(neighboringMines) : "");
+                button.setText(neighboringMines > 0 ? Integer.toString(neighboringMines) : "0");
                 button.setEnabled(false);
             }
         } else if (cell.isFlagged()) {
             button.setText("F");
-            button.setEnabled(false); // Disable flagged buttons
+            button.setEnabled(false);
         } else {
             button.setText("");
-            button.setEnabled(true); // Enable the button if it is not revealed or flagged
+            button.setEnabled(true);
         }
     }
 
@@ -121,6 +123,26 @@ public class GameGUI {
 
         return true;
     }
+    private static void revealAllMines(Board board, JButton[][] buttonGrid) {
+        for (int y = 0; y < board.getHeight(); y++) {
+            for (int x = 0; x < board.getWidth(); x++) {
+                Cell cell = board.getCell(y, x);
+                if (cell.isMine()) {
+                    JButton button = buttonGrid[y][x];
+                    button.setBackground(Color.RED);
+                }
+            }
+        }
+    }
+
+    private static void disableAllButtons(JButton[][] buttonGrid) {
+        for (int y = 0; y < buttonGrid.length; y++) {
+            for (int x = 0; x < buttonGrid[y].length; x++) {
+                buttonGrid[y][x].setEnabled(false);
+            }
+        }
+    }
+
 
 
 }
