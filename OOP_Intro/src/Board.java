@@ -76,21 +76,19 @@ public class Board {
                     // Check all adjacent cells in a 3x3 block centered on the current cell
                     for (int i = -1; i <= 1; i++) {
                         for (int j = -1; j <= 1; j++) {
-                            // Calculate the coordinates of the neighboring cell
+
                             int nx = x + i;
                             int ny = y + j;
 
-                            // Make sure the neighboring cell is within the board's boundaries
+
                             if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                                // If the neighboring cell is a mine, increment the mine count
+
                                 if (cells[ny][nx].isMine()) {
                                     mineCount++;
                                 }
                             }
                         }
                     }
-
-                    // After counting all adjacent mines, set the mine count for the current cell
                     cells[y][x].setNeighboringMines(mineCount);
                 }
             }
@@ -107,11 +105,11 @@ public class Board {
         cells[row][col].reveal();
         System.out.println("Revealed cell at (" + row + ", " + col + ")");
 
-        // If the cell has no neighboring mines, recursively reveal its neighbors
+
         if (cells[row][col].getNeighboringMines() == 0) {
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    if (i == 0 && j == 0) continue; // Skip the cell itself
+                    if (i == 0 && j == 0) continue;
                     revealCell(row + i, col + j);
                 }
             }

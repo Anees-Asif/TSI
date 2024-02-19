@@ -4,7 +4,10 @@ import java.awt.event.*;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class GameGUI {
+    public static void main(String[] args) {
 
+        SwingUtilities.invokeLater(() -> createAndShowGUI());
+    }
     public static void createAndShowGUI() {
         int width = Integer.parseInt(JOptionPane.showInputDialog("Enter board width:"));
         int height = Integer.parseInt(JOptionPane.showInputDialog("Enter board height:"));
@@ -31,15 +34,16 @@ public class GameGUI {
                         @Override
                         public void mouseReleased(MouseEvent e) {
                             if (SwingUtilities.isRightMouseButton(e)) {
-
                                 Cell cell = board.getCell(finalY, finalX);
                                 if (!cell.isRevealed()) {
                                     cell.toggleFlag();
                                     button.setText(cell.isFlagged() ? "F" : "");
+                                    button.setBackground(cell.isFlagged() ? Color.ORANGE : null);
                                 }
                             }
                         }
                     });
+
 
                     button.addActionListener(new ActionListener() {
                         @Override
@@ -76,10 +80,7 @@ public class GameGUI {
         }
     }
 
-    public static void main(String[] args) {
 
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
-    }
     private static void refreshGrid(Board board, JButton[][] buttonGrid) {
         for (int y = 0; y < board.getHeight(); y++) {
             for (int x = 0; x < board.getWidth(); x++) {
@@ -96,19 +97,19 @@ public class GameGUI {
         if (cell.isRevealed()) {
             if (cell.isMine()) {
                 button.setBackground(Color.RED);
+                button.setText("*");
             } else {
                 int neighboringMines = cell.getNeighboringMines();
                 button.setText(neighboringMines > 0 ? Integer.toString(neighboringMines) : "0");
-                button.setEnabled(false);
+                button.setBackground(null);
             }
-        } else if (cell.isFlagged()) {
-            button.setText("F");
-            button.setEnabled(false);
         } else {
-            button.setText("");
-            button.setEnabled(true);
+            button.setText(cell.isFlagged() ? "F" : "");
+            button.setBackground(cell.isFlagged() ? Color.ORANGE : null);
         }
+        button.setEnabled(!cell.isRevealed());
     }
+
 
     private static boolean checkWinCondition(Board board) {
         for (int y = 0; y < board.getHeight(); y++) {
