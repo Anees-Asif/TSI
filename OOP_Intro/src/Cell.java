@@ -1,6 +1,7 @@
 public class Cell {
     private boolean isMine;
     private boolean isRevealed;
+    private boolean isFlagged;
     private int neighboringMines;
 
 
@@ -19,6 +20,9 @@ public class Cell {
     public void reveal() {
         isRevealed = true;
     }
+    public boolean isFlagged() {return isFlagged;}
+
+    public void toggleFlag() {isFlagged = !isFlagged;}
 
     public int getNeighboringMines() {
         return neighboringMines;
