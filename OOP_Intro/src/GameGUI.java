@@ -5,64 +5,77 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class GameGUI {
 
-    public static void createAndShowGUI(Board board) {
-        JFrame frame = new JFrame("Minesweeper");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel gridPanel = new JPanel(new GridLayout(board.getHeight(), board.getWidth()));
-        JButton[][] buttonGrid = new JButton[board.getHeight()][board.getWidth()];
+    public static void createAndShowGUI() {
+        int width = Integer.parseInt(JOptionPane.showInputDialog("Enter board width:"));
+        int height = Integer.parseInt(JOptionPane.showInputDialog("Enter board height:"));
+        int mines = Integer.parseInt(JOptionPane.showInputDialog("Enter number of mines:"));
 
-        for (int y = 0; y < board.getHeight(); y++) {
-            for (int x = 0; x < board.getWidth(); x++) {
-                JButton button = new JButton();
-                buttonGrid[y][x] = button;
-                int finalY = y;
-                int finalX = x;
+        if (width > 0 && height > 0 && mines < width * height) {
+            Board board = new Board(width, height, mines);
+            JFrame frame = new JFrame("Minesweeper");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setPreferredSize(new Dimension(800, 600));
+
+            JPanel gridPanel = new JPanel(new GridLayout(board.getHeight(), board.getWidth()));
+            JButton[][] buttonGrid = new JButton[board.getHeight()][board.getWidth()];
+
+            for (int y = 0; y < board.getHeight(); y++) {
+                for (int x = 0; x < board.getWidth(); x++) {
+                    JButton button = new JButton();
+                    buttonGrid[y][x] = button;
+                    int finalY = y;
+                    int finalX = x;
 
 
-                button.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        if (SwingUtilities.isRightMouseButton(e)) {
+                    button.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                            if (SwingUtilities.isRightMouseButton(e)) {
 
+                                Cell cell = board.getCell(finalY, finalX);
+                                if (!cell.isRevealed()) {
+                                    cell.toggleFlag();
+                                    button.setText(cell.isFlagged() ? "F" : "");
+                                }
+                            }
+                        }
+                    });
+
+                    button.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
                             Cell cell = board.getCell(finalY, finalX);
-                            if (!cell.isRevealed()) {
-                                cell.toggleFlag();
-                                button.setText(cell.isFlagged() ? "F" : "");
+                            if (!cell.isRevealed() && !cell.isFlagged()) {
+                                board.revealCell(finalY, finalX);
+                                refreshGrid(board, buttonGrid);
+
+                                if (cell.isMine()) {
+                                    button.setBackground(Color.RED);
+                                    showMessageDialog(frame, "Game over. You hit a mine!");
+                                } else if (checkWinCondition(board)) {
+                                    showMessageDialog(frame, "Congratulations, you've cleared all non-mine cells!");
+
+                                }
                             }
                         }
-                    }
-                });
-
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Cell cell = board.getCell(finalY, finalX);
-                        if (!cell.isRevealed() && !cell.isFlagged()) {
-                            board.revealCell(finalY, finalX);
-                            refreshGrid(board, buttonGrid);
-
-                            if (cell.isMine()) {
-                                button.setBackground(Color.RED);
-                                showMessageDialog(frame, "Game over. You hit a mine!");
-                            } else if (checkWinCondition(board)) {
-                                showMessageDialog(frame, "Congratulations, you've cleared all non-mine cells!");
-
-                            }
-                        }
-                    }
-                });
-                gridPanel.add(button);
+                    });
+                    gridPanel.add(button);
+                }
             }
-        }
 
-        frame.add(gridPanel);
-        frame.pack();
-        frame.setVisible(true);
+            frame.add(gridPanel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        } else{
+            JOptionPane.showMessageDialog(null, "Invalid input. Please enter valid dimensions and number of mines.");
+            System.exit(1); // Exit the application if the input is invalid
+        }
     }
 
     public static void main(String[] args) {
-        Board board = new Board(4, 4, 3);
-        SwingUtilities.invokeLater(() -> createAndShowGUI(board));
+
+        SwingUtilities.invokeLater(() -> createAndShowGUI());
     }
     private static void refreshGrid(Board board, JButton[][] buttonGrid) {
         for (int y = 0; y < board.getHeight(); y++) {
