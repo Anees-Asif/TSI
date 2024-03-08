@@ -103,7 +103,7 @@ public class Board {
         }
 
         cells[row][col].reveal();
-        System.out.println("Revealed cell at (" + row + ", " + col + ")");
+       // System.out.println("Revealed cell at (" + row + ", " + col + ")");
 
 
         if (cells[row][col].getNeighboringMines() == 0) {
